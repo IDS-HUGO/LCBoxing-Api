@@ -7,16 +7,18 @@ public class Config {
 
     static {
         Dotenv temp;
+
         try {
             temp = Dotenv.configure()
-                    .directory(System.getProperty("user.dir") + "/src/main/resources")
                     .ignoreIfMissing()
-                    .load();
+                    .load(); // AUTOMATICO: busca .env en resources o root
         } catch (Exception e) {
             temp = null;
         }
+
         dotenv = temp;
     }
+
 
     // Server
     public static final int SERVER_PORT = getInt("SERVER_PORT", 7000);

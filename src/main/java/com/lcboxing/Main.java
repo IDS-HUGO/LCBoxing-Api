@@ -8,8 +8,6 @@ import com.lcboxing.config.DatabaseConfig;
 import com.lcboxing.routes.*;
 import com.lcboxing.services.AuthService;
 import io.javalin.Javalin;
-import io.javalin.http.Context;
-import io.javalin.json.JavalinJackson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +37,10 @@ public class Main {
 
         // Crear aplicación Javalin
         Javalin app = Javalin.create(config -> {
-            config.jsonMapper(new JavalinJackson(objectMapper));
+            config.jsonMapper(new io.javalin.json.JavalinJackson(objectMapper));
             config.plugins.enableCors(cors -> {
                 cors.add(it -> {
-                    it.anyHost(); // permite cualquier origen
+                    it.anyHost();
                     it.allowCredentials = true;
                 });
             });
@@ -74,7 +72,6 @@ public class Main {
                             "message", "Token no proporcionado"
                     ));
                     return;
-
                 }
 
                 String token = authService.extractTokenFromHeader(authHeader);
@@ -88,10 +85,9 @@ public class Main {
             } catch (Exception e) {
                 ctx.status(401).json(Map.of(
                         "success", false,
-                        "message", "Token no proporcionado"
+                        "message", "Token inválido o expirado"
                 ));
                 return;
-
             }
         });
 
@@ -155,11 +151,17 @@ public class Main {
         // Rutas de membresías
         new MembresiaRoutes().register(app);
 
+        // Rutas de tipos de membresía
+        new TipoMembresiaRoutes().register(app);
+
         // Rutas de pagos
         new PagoRoutes().register(app);
 
         // Rutas de asistencias
         new AsistenciaRoutes().register(app);
+
+        // Rutas de dashboard
+        new DashboardRoutes().register(app);
 
         logger.info("✓ Rutas registradas correctamente");
     }

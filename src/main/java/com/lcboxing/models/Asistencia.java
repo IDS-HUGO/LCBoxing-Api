@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import java.time.LocalTime;class Asistencia {
+import java.time.LocalTime;
+
+public class Asistencia {
     private Integer idAsistencia;
     private Integer idAtleta;
     private Integer idMembresia;
