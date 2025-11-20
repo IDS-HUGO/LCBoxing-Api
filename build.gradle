@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.lcboxing'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Javalin
+    implementation 'io.javalin:javalin:5.6.3'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
+
+    // JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
+
+    // MySQL
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+
+    // JWT
+    implementation 'com.auth0:java-jwt:4.4.0'
+
+    // BCrypt para passwords
+    implementation 'org.mindrot:jbcrypt:0.4'
+
+    // Dotenv
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
+    // Validation
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.hibernate.validator:hibernate-validator:7.0.5.Final'
+    implementation 'org.glassfish:jakarta.el:4.0.2'
+
+    // Lombok (opcional pero recomendado)
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+application {
+    mainClass = 'com.lcboxing.Main'
+}
+
+shadowJar {
+    archiveBaseName.set('lcboxing-api')
+    archiveClassifier.set('')
+    archiveVersion.set('1.0.0')
+    mergeServiceFiles()
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
